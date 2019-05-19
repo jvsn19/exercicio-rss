@@ -1,17 +1,21 @@
 package br.ufpe.cin.if710.rss
 
 import android.app.Activity
+import android.os.AsyncTask
 import android.os.Bundle
 import android.widget.Adapter
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.accountManager
+import org.jetbrains.anko.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.lang.Exception
+import java.net.HttpURLConnection
 import java.net.URL
+import java.nio.charset.Charset
 
 class MainActivity : Activity() {
     private val RSS_FEED: String = "http://leopoldomt.com/if1001/g1brasil.xml"
@@ -21,28 +25,25 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         conteudoRSS = findViewById(R.id.conteudoRSS)
-    }
 
-    override fun onStart() {
-        super.onStart()
-        try {
-            val feed = getRssFeed(RSS_FEED)
-            conteudoRSS.text = feed
-        } catch (e: IOException) {
-            e.printStackTrace()
+        doAsync {
+            var feed = getRssFeed(RSS_FEED)
+            uiThread {
+                conteudoRSS.text = feed
+            }
         }
+
     }
-
-
 
     @Throws(IOException::class)
     private fun getRssFeed(feed: String): String {
         var inputStream: InputStream? = null
-        val rssFeed: String
+        var rssFeed: String = ""
+
         try {
-            val url = URL(feed)
+                val url = URL(feed)
             val conn = url.openConnection()
-            inputStream = conn.getInputStream()
+            inputStream = conn.inputStream
             val out = ByteArrayOutputStream()
             val buffer = ByteArray(1024)
 
@@ -53,9 +54,14 @@ class MainActivity : Activity() {
             }
             var response = out.toByteArray()
             rssFeed = String(response, Charsets.UTF_8)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         } finally {
             inputStream?.close()
         }
+
+        println("jvsn: $rssFeed")
         return rssFeed
     }
 }
