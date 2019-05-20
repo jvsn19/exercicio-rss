@@ -1,29 +1,21 @@
 package br.ufpe.cin.if710.rss
 
 import android.app.Activity
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.ViewManager
-import android.widget.Adapter
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.lang.Exception
-import java.net.HttpURLConnection
 import java.net.URL
-import java.nio.charset.Charset
 
 class MainActivity : Activity() {
-    val feedList :ArrayList<ItemRSS> = ArrayList(0)
+    private val feedList :ArrayList<ItemRSS> = ArrayList(0)
 
-    private val RSS_FEED: String = "http://leopoldomt.com/if1001/g1brasil.xml"
+    private val RSS_FEED: String = "http://pox.globo.com/rss/g1/tecnologia/"
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recyclerView: RecyclerView
     private lateinit var rssAdapter: RSSAdapter
