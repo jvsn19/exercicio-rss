@@ -32,9 +32,9 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.feedRecyclerView)
+        recyclerView = findViewById(R.id.conteudoRSS)
         linearLayoutManager = LinearLayoutManager(this)
-        feedRecyclerView.layoutManager = linearLayoutManager
+        conteudoRSS.layoutManager = linearLayoutManager
         rssAdapter = RSSAdapter(feedList)
         recyclerView.adapter = rssAdapter
     }
@@ -44,7 +44,7 @@ class MainActivity : Activity() {
         doAsync {
             val xmlString = getRssFeed(RSS_FEED)
             val feedList = ParserRSS.parse(xmlString) as ArrayList<ItemRSS>
-            rssAdapter.items = feedList
+            rssAdapter.rssArrayList = feedList
             uiThread {
                 rssAdapter.notifyDataSetChanged()
             }
